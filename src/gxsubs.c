@@ -27,7 +27,7 @@
 #include "gx.h"
 
 char *gaqupb (char *, gaint);
-void gree ();
+void gree (void *, char *);
 
 /* The following variables are local to this file, and are used by
    all the routines in the file.    */
@@ -115,6 +115,46 @@ gaint gxload(char *gxdopt, char *gxpopt) {
   char *cname=NULL;
   FILE *cfile;
   
+  /* Display — load first so its symbols (e.g. gxdXflush) are available to print plugin */
+  dname=(const char *)gaqupb(gxdopt,3);
+  if (dname==NULL) {
+    printf("GX Package Error: Could not find a record for the display plug-in named \"%s\" \n",gxdopt);
+    /* Tell user where we looked based on $GAUDPT */
+    cname = getenv("GAUDPT");
+    if (cname==NULL) {
+      printf("  * The environment variable GAUDPT has not been set\n");
+    } 
+    else {
+      cfile = fopen(cname,"r");
+      if (cfile==NULL) {
+        printf("  * Unable to open the file named by the GAUDPT environment variable: %s\n",cname);
+      }
+      else {
+        printf("  * No entry with \"gxdisplay %s\" in the file named by the GAUDPT environment variable: %s\n",gxdopt,cname);
+        fclose(cfile);
+      }
+    }
+    /* Tell user where we looked based on $GADDIR/udpt */
+    cname = gxgnam("udpt");
+    cfile = fopen(cname,"r");
+    if (cfile==NULL) {
+      printf("  * Unable to open the default User Defined Plug-in Table: %s\n",cname);
+    }
+    else {
+      printf("  * No entry with \"gxdisplay %s\" in the default User Defined Plug-in Table: %s\n",gxdopt,cname);
+      fclose(cfile);
+    }
+    printf("  Please read the documentation at http://cola.gmu.edu/grads/gadoc/plugins.html\n");
+    return(1);
+  }
+  dlerror();
+  dhandle = dlopen (dname, RTLD_LAZY | RTLD_GLOBAL);
+  if (!dhandle) {
+    printf("GX Package Error: dlopen failed to get a a handle on gxdisplay plug-in named \"%s\" \n",gxdopt); 
+    if ((err=dlerror())!=NULL) printf("   %s\n",err); 
+    return(2);
+  }
+
   /* Printing Hardcopy */
   pname=(const char *)gaqupb(gxpopt,4);
   if (pname==NULL) {
@@ -153,46 +193,6 @@ gaint gxload(char *gxdopt, char *gxpopt) {
     printf("GX Package Error: dlopen failed to get a handle on gxprint plug-in named \"%s\" \n",gxpopt); 
     if ((err=dlerror())!=NULL) printf("   %s\n",err); 
     return(1);
-  }
-
-  /* Display */
-  dname=(const char *)gaqupb(gxdopt,3);
-  if (dname==NULL) {
-    printf("GX Package Error: Could not find a record for the display plug-in named \"%s\" \n",gxpopt);
-    /* Tell user where we looked based on $GAUDPT */
-    cname = getenv("GAUDPT");
-    if (cname==NULL) {
-      printf("  * The environment variable GAUDPT has not been set\n");
-    } 
-    else {
-      cfile = fopen(cname,"r");
-      if (cfile==NULL) {
-        printf("  * Unable to open the file named by the GAUDPT environment variable: %s\n",cname);
-      }
-      else {
-        printf("  * No entry with \"gxdisplay %s\" in the file named by the GAUDPT environment variable: %s\n",gxdopt,cname);
-        fclose(cfile);
-      }
-    }
-    /* Tell user where we looked based on $GADDIR/udpt */
-    cname = gxgnam("udpt");
-    cfile = fopen(cname,"r");
-    if (cfile==NULL) {
-      printf("  * Unable to open the default User Defined Plug-in Table: %s\n",cname);
-    }
-    else {
-      printf("  * No entry with \"gxdisplay %s\" in the default User Defined Plug-in Table: %s\n",gxdopt,cname);
-      fclose(cfile);
-    }
-    printf("  Please read the documentation at http://cola.gmu.edu/grads/gadoc/plugins.html\n");
-    return(1);
-  }
-  dlerror();
-  dhandle = dlopen (dname, RTLD_LAZY);
-  if (!dhandle) {
-    printf("GX Package Error: dlopen failed to get a a handle on gxdisplay plug-in named \"%s\" \n",gxdopt); 
-    if ((err=dlerror())!=NULL) printf("   %s\n",err); 
-    return(2);
   }
   
   /* Get pointers to the printing subroutines */

@@ -1,0 +1,141 @@
+{% set name = "grads" %}
+{% set version = "2.2.3" %}
+{% set tag = "v2.2.3.post1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/RogierFloors/GrADS/archive/refs/tags/{{ tag }}.tar.gz
+  sha256: b4e18e747526a6ebdbad8341e83531e11f2459c252504827609e212457c66613
+
+build:
+  number: 0
+  skip: true  # [not linux]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+    - make
+    - autoconf
+    - automake
+    - libtool
+    - pkg-config
+    - xorg-xproto
+  host:
+    - python
+    - xorg-xproto
+    - libxcb
+    - xorg-libx11
+    - freetype
+    - libnetcdf
+    - hdf5
+    - hdf4
+    - udunits2
+    - g2clib ==2.3.0
+    - geotiff
+    - libtiff
+    - cairo
+    - readline
+    - ncurses
+    - libpng
+    - zlib
+    - libjpeg-turbo
+    - jasper
+    - libgd
+    - libxml2
+    - curl
+    - shapelib
+
+test:
+  commands:
+    - |
+      printf "'q config'\n'quit'\n" | "${PREFIX}/bin/grads" -bl
+    - ${PREFIX}/bin/gribmap -help || true
+    - test -f "${PREFIX}/share/grads/udpt"
+    - test -f "${PREFIX}/lib/libgradspy.so"
+
+outputs:
+  - name: grads
+    files:
+      - bin/grads
+      - bin/gribmap
+      - bin/stnmap
+      - bin/gribscan
+      - bin/grib2scan
+      - bin/bufrscan
+      - lib/libgxd*.so*
+      - lib/libgxp*.so*
+      - lib/libgradspy.so*
+      - lib/libgrib2c.so
+      - share/grads
+      - etc/conda/activate.d/grads-env.sh
+      - etc/conda/deactivate.d/grads-env.sh
+    requirements:
+      run:
+        - libnetcdf
+        - hdf5
+        - hdf4
+        - libudunits2
+        - g2clib ==2.3.0
+        - nceplibs-g2c ==2.3.0
+        - geotiff
+        - libtiff
+        - jasper
+        - cairo
+        - libcurl
+        - readline
+        - libpng
+        - ncurses
+        - libgd
+        - shapelib
+        - xorg-libice
+        - xorg-libsm
+        - xorg-libx11
+        - xorg-libxext
+    about:
+      home: http://cola.gmu.edu/grads/
+      license: GPL-2.0-only
+      license_file: COPYRIGHT
+      summary: Grid Analysis and Display System
+      description: |
+        GrADS is an interactive desktop tool for access, manipulation, and
+        visualization of earth science data.
+
+  - name: gradspy
+    build:
+      noarch: python
+    files:
+      - lib/python*/site-packages/gradspy.py
+    requirements:
+      run:
+        - python >=3.8
+        - numpy >=2.0
+        - pandas
+        - xarray
+        - grads =={{ version }}
+    test:
+      imports:
+        - gradspy
+      commands:
+        - python -c "from gradspy import GrADS; print(GrADS)"
+    about:
+      home: http://cola.gmu.edu/grads/
+      license: GPL-2.0-only
+      license_file: COPYRIGHT
+      summary: Python interface to GrADS
+
+about:
+  home: http://cola.gmu.edu/grads/
+  license: GPL-2.0-only
+  license_file: COPYRIGHT
+  summary: Grid Analysis and Display System
+  description: |
+    GrADS is an interactive desktop tool for access, manipulation, and
+    visualization of earth science data.
+
+extra:
+  recipe-maintainers:
+    - RogierFloors
