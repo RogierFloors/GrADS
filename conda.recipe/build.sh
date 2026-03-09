@@ -1,0 +1,55 @@
+#!/bin/bash
+set -ex
+
+# g2clib provides libg2c but GrADS configure expects libgrib2c
+if [ -f "$PREFIX/lib/libg2c.so" ] && [ ! -f "$PREFIX/lib/libgrib2c.so" ]; then
+  ln -s libg2c.so "$PREFIX/lib/libgrib2c.so"
+fi
+
+SUPPLIBS="$PREFIX" ./configure \
+  --prefix="$PREFIX" \
+  --with-netcdf="$PREFIX" \
+  --with-hdf5="$PREFIX" \
+  --enable-dyn-supplibs \
+  CPPFLAGS="-I$PREFIX/include -DH5_USE_110_API" \
+  LDFLAGS="-L$PREFIX/lib -Wl,-rpath,$PREFIX/lib"
+
+make -j"${CPU_COUNT:-1}"
+make install
+
+# Install data files
+mkdir -p "$PREFIX/share/grads"
+cp -r data/* "$PREFIX/share/grads/"
+
+# Create UDPT (User Defined Plug-in Table) pointing to conda env libs
+cat > "$PREFIX/share/grads/udpt" <<'EOF'
+# Type     Name     Full path to shared object file
+gxdisplay  Cairo    %s/lib/libgxdCairo.so
+gxdisplay  X11      %s/lib/libgxdX11.so
+gxdisplay  gxdummy  %s/lib/libgxdummy.so
+*
+gxprint    Cairo    %s/lib/libgxpCairo.so
+gxprint    gxdummy  %s/lib/libgxdummy.so
+EOF
+# Replace %s placeholders with $PREFIX (escaped for sed)
+sed -i "s|%s|$PREFIX|g" "$PREFIX/share/grads/udpt"
+
+# Create conda activation/deactivation scripts
+mkdir -p "$PREFIX/etc/conda/activate.d"
+mkdir -p "$PREFIX/etc/conda/deactivate.d"
+
+cat > "$PREFIX/etc/conda/activate.d/grads-env.sh" <<EOF
+#!/bin/bash
+export GADDIR_BACKUP="\$GADDIR"
+export GAUDPT_BACKUP="\$GAUDPT"
+export GADDIR="$PREFIX/share/grads"
+export GAUDPT="$PREFIX/share/grads/udpt"
+EOF
+
+cat > "$PREFIX/etc/conda/deactivate.d/grads-env.sh" <<EOF
+#!/bin/bash
+export GADDIR="\$GADDIR_BACKUP"
+export GAUDPT="\$GAUDPT_BACKUP"
+unset GADDIR_BACKUP
+unset GAUDPT_BACKUP
+EOF

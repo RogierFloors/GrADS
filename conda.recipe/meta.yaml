@@ -1,0 +1,54 @@
+package:
+  name: grads
+  version: 2.2.3
+
+source:
+  path: ..
+
+build:
+  number: 3
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
+    - make
+    - autoconf
+    - automake
+    - libtool
+    - pkg-config
+  host:
+    - libnetcdf
+    - hdf5
+    - hdf4
+    - udunits2
+    - g2clib ==1.6.0
+    - geotiff
+    - libtiff
+    - cairo
+    - readline
+    - ncurses
+    - libpng
+    - zlib
+    - jpeg
+    - jasper
+    - libgd
+    - libxml2
+    - curl
+  run:
+    - libnetcdf
+    - hdf5
+    - udunits2
+    - g2clib ==1.6.0
+    - geotiff
+    - libtiff
+    - jasper
+    - cairo
+    - readline
+    - libpng
+    - ncurses
+
+about:
+  home: http://cola.gmu.edu/grads/
+  license: GPL-2.0
+  summary: Grid Analysis and Display System (GrADS)
