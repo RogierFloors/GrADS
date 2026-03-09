@@ -1309,5 +1309,5 @@ gaint initUnitSys(void);
 #endif
 
 void *galloc(size_t,char *);
-void gree();
+void gree(void *, char *);
 void glook();

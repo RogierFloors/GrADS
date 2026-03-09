@@ -4327,7 +4327,7 @@ size_t sz,asize;
                 for (j=0; j<sz; j++) cattr_val[j] = strattr_val[0][j];
                 cattr_val[sz]='\0';
                 nc_free_string(asize, strattr_val);
-                gree(strattr_val);
+                gree(strattr_val, NULL);
                 gaprnt(2,abbrv); 
                 gaprnt(2," String ");
                 gaprnt(2,attr_name); 
@@ -4775,7 +4775,7 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
     if (h5openvar(h5id, vname, &dsid, &vid, cachesize)) err=1;
   }
   if (!err) {
-    rc = H5Oget_info(vid,&oinfo);
+    rc = H5Oget_info1(vid,&oinfo);
     if (rc<0) err=1;
   }
   if (err) return (0); /* zero attributes printed */
