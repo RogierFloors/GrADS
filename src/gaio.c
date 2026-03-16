@@ -4748,7 +4748,7 @@ size_t sz;
 /* Subroutine to print out HDF5 (variable) attributes */
 #if USEHDF5 == 1
 gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, char* ftit, long cachesize) {
-  H5O_info_t oinfo;
+  H5O_info2_t oinfo;
   H5T_class_t aclass=-1;
   H5T_sign_t asign;
   hid_t   vid,dsid,aid=-1,atype=-1,aspace=-1;
@@ -4775,7 +4775,7 @@ gaint h5pattrs(hid_t h5id, char *vname, char *abbrv, gaint hdrflg, gaint fnum, c
     if (h5openvar(h5id, vname, &dsid, &vid, cachesize)) err=1;
   }
   if (!err) {
-    rc = H5Oget_info1(vid,&oinfo);
+    rc = H5Oget_info3(vid,&oinfo,H5O_INFO_NUM_ATTRS);
     if (rc<0) err=1;
   }
   if (err) return (0); /* zero attributes printed */

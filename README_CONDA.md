@@ -180,7 +180,7 @@ The conda recipe is in `conda.recipe/`:
 
 The source code includes patches for:
 1. **GCC 15 compatibility** — Updated function prototypes (K&R style `void func()` → modern `void func(void)`)
-2. **HDF5 1.12+ API** — Uses `H5Oget_info1()` instead of deprecated `H5Oget_info()`
+2. **HDF5 1.12+ API** — Uses `H5Oget_info3()` and `H5O_info2_t` instead of deprecated v1 API
 3. **Plugin loading order** — Correct load sequence for display and print plugins
 
 These fixes are committed to the `conda_build` branch and are applied automatically during the conda build.

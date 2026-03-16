@@ -11,7 +11,11 @@ SUPPLIBS="$PREFIX" ./configure \
   --with-netcdf="$PREFIX" \
   --with-hdf5="$PREFIX" \
   --enable-dyn-supplibs \
-  CPPFLAGS="-I$PREFIX/include -DH5_USE_110_API" \
+  CAIRO_CFLAGS="-I$PREFIX/include/cairo -I$PREFIX/include/freetype2" \
+  CAIRO_LIBS="-L$PREFIX/lib -lcairo" \
+  GD_CFLAGS="-I$PREFIX/include" \
+  GD_LIBS="-L$PREFIX/lib -lgd" \
+  CPPFLAGS="-I$PREFIX/include -I$PREFIX/include/freetype2" \
   LDFLAGS="-L$PREFIX/lib -Wl,-rpath,$PREFIX/lib"
 
 make -j"${CPU_COUNT:-1}"
@@ -29,6 +33,7 @@ gxdisplay  X11      %s/lib/libgxdX11.so
 gxdisplay  gxdummy  %s/lib/libgxdummy.so
 *
 gxprint    Cairo    %s/lib/libgxpCairo.so
+gxprint    GD       %s/lib/libgxpGD.so
 gxprint    gxdummy  %s/lib/libgxdummy.so
 EOF
 # Replace %s placeholders with $PREFIX (escaped for sed)

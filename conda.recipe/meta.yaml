@@ -6,7 +6,7 @@ source:
   path: ..
 
 build:
-  number: 3
+  number: 5
 
 requirements:
   build:
@@ -17,12 +17,17 @@ requirements:
     - automake
     - libtool
     - pkg-config
+    - xorg-xproto
   host:
+    - xorg-xproto
+    - libxcb
+    - xorg-libx11
+    - freetype
     - libnetcdf
     - hdf5
     - hdf4
     - udunits2
-    - g2clib ==1.6.0
+    - g2clib ==2.3.0
     - geotiff
     - libtiff
     - cairo
@@ -30,16 +35,17 @@ requirements:
     - ncurses
     - libpng
     - zlib
-    - jpeg
+    - libjpeg-turbo
     - jasper
     - libgd
     - libxml2
     - curl
+    - shapelib
   run:
     - libnetcdf
     - hdf5
     - udunits2
-    - g2clib ==1.6.0
+    - g2clib ==2.3.0
     - geotiff
     - libtiff
     - jasper
@@ -47,6 +53,8 @@ requirements:
     - readline
     - libpng
     - ncurses
+    - libgd
+    - shapelib
 
 about:
   home: http://cola.gmu.edu/grads/
