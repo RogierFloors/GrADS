@@ -23,7 +23,7 @@ requirements:
     - libxcb
     - xorg-libx11
     - freetype
-    - libnetcdf
+    - libnetcdf ==4.10
     - hdf5
     - hdf4
     - udunits2
@@ -42,7 +42,7 @@ requirements:
     - curl
     - shapelib
   run:
-    - libnetcdf
+    - libnetcdf ==4.10
     - hdf5
     - udunits2
     - g2clib ==2.3.0
