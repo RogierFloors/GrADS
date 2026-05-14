@@ -1,6 +1,8 @@
+{% set version = "2.2.3" %}
+
 package:
   name: grads
-  version: 2.2.3
+  version: {{ version }}
 
 source:
   path: ..
@@ -19,6 +21,7 @@ requirements:
     - pkg-config
     - xorg-xproto
   host:
+    - python
     - xorg-xproto
     - libxcb
     - xorg-libx11
@@ -60,3 +63,22 @@ about:
   home: http://cola.gmu.edu/grads/
   license: GPL-2.0
   summary: Grid Analysis and Display System (GrADS)
+
+outputs:
+  - name: gradspy
+    build:
+      noarch: python
+    files:
+      - lib/python*/site-packages/gradspy.py
+      - lib/python*/site-packages/__pycache__/gradspy.cpython-*.pyc
+    requirements:
+      run:
+        - python >=3.8
+        - numpy >=2.0
+        - pandas
+        - xarray
+        - grads =={{ version }}
+    about:
+      home: http://cola.gmu.edu/grads/
+      license: GPL-2.0
+      summary: Python interface to GrADS (Grid Analysis and Display System)

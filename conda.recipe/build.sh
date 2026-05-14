@@ -21,11 +21,14 @@ SUPPLIBS="$PREFIX" ./configure \
 make -j"${CPU_COUNT:-1}"
 make install
 
+# Install Python interface; claimed by the grads-python noarch output
+install -m 644 src/gradspy.py "$SP_DIR/gradspy.py"
+
 # Install data files
 mkdir -p "$PREFIX/share/grads"
 cp -r data/* "$PREFIX/share/grads/"
 
-# Create UDPT (User Defined Plug-in Table) pointing to conda env libs
+# Create UDPT
 cat > "$PREFIX/share/grads/udpt" <<'EOF'
 # Type     Name     Full path to shared object file
 gxdisplay  Cairo    %s/lib/libgxdCairo.so
@@ -47,14 +50,18 @@ cat > "$PREFIX/etc/conda/activate.d/grads-env.sh" <<EOF
 #!/bin/bash
 export GADDIR_BACKUP="\$GADDIR"
 export GAUDPT_BACKUP="\$GAUDPT"
+export GAGPY_BACKUP="\$GAGPY"
 export GADDIR="$PREFIX/share/grads"
 export GAUDPT="$PREFIX/share/grads/udpt"
+export GAGPY="$PREFIX/lib/libgradspy.so"
 EOF
 
 cat > "$PREFIX/etc/conda/deactivate.d/grads-env.sh" <<EOF
 #!/bin/bash
 export GADDIR="\$GADDIR_BACKUP"
 export GAUDPT="\$GAUDPT_BACKUP"
+export GAGPY="\$GAGPY_BACKUP"
 unset GADDIR_BACKUP
 unset GAUDPT_BACKUP
+unset GAGPY_BACKUP
 EOF
