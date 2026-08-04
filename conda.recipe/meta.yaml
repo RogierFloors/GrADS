@@ -26,11 +26,12 @@ requirements:
     - libxcb
     - xorg-libx11
     - freetype
-    - libnetcdf ==4.10
+    - libnetcdf >=4.10,<5
     - hdf5
     - hdf4
     - udunits2
-    - g2clib ==2.3.0
+    - g2clib >=2.3,<3
+    - nceplibs-g2c >=2.3,<3
     - geotiff
     - libtiff
     - cairo
@@ -45,10 +46,11 @@ requirements:
     - curl
     - shapelib
   run:
-    - libnetcdf ==4.10
+    - libnetcdf >=4.10,<5
     - hdf5
     - udunits2
-    - g2clib ==2.3.0
+    - g2clib >=2.3,<3
+    - nceplibs-g2c >=2.3,<3
     - geotiff
     - libtiff
     - jasper

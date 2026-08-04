@@ -2,8 +2,16 @@
 set -ex
 
 # g2clib provides libg2c but GrADS configure expects libgrib2c
-if [ -f "$PREFIX/lib/libg2c.so" ] && [ ! -f "$PREFIX/lib/libgrib2c.so" ]; then
-  ln -s libg2c.so "$PREFIX/lib/libgrib2c.so"
+if [ ! -e "$PREFIX/lib/libg2c.so" ] && [ ! -e "$PREFIX/lib/libg2c.so.0" ]; then
+  echo "ERROR: nceplibs-g2c was not installed; libg2c is missing" >&2
+  exit 1
+fi
+if [ ! -e "$PREFIX/lib/libgrib2c.so" ]; then
+  if [ -e "$PREFIX/lib/libg2c.so" ]; then
+    ln -s libg2c.so "$PREFIX/lib/libgrib2c.so"
+  else
+    ln -s libg2c.so.0 "$PREFIX/lib/libgrib2c.so"
+  fi
 fi
 
 SUPPLIBS="$PREFIX" ./configure \
