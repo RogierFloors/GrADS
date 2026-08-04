@@ -22,14 +22,4 @@ Verify the native installation with:
 printf "'q config'\n'quit'\n" | grads -bl
 ```
 
-## Package-maintainer documentation
-
-The public build instructions live beside the recipes they describe:
-
-- [Recipe build, test, and submission guide](conda.recipe/README.md)
-
-After the initial conda-forge submission is accepted, the generated
-`grads-feedstock` repository becomes authoritative for published package
-maintenance.
-
 General source-build instructions are in [INSTALL](INSTALL).
