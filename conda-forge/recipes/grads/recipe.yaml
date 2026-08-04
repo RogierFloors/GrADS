@@ -1,0 +1,142 @@
+schema_version: 1
+
+context:
+  version: "2.2.3.post1"
+  tag: "v2.2.3.post1"
+
+recipe:
+  name: grads
+  version: ${{ version }}
+
+source:
+  url: https://github.com/RogierFloors/GrADS/archive/refs/tags/${{ tag }}.tar.gz
+  sha256: b4e18e747526a6ebdbad8341e83531e11f2459c252504827609e212457c66613
+
+outputs:
+  - staging:
+      name: grads-build
+    build:
+      script: build.sh
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ compiler('fortran') }}
+        - make
+        - autoconf
+        - automake
+        - libtool
+        - pkg-config
+        - xorg-xproto
+      host:
+        - xorg-xproto
+        - libxcb
+        - xorg-libx11
+        - freetype
+        - libnetcdf
+        - hdf5
+        - hdf4
+        - udunits2
+        - g2clib
+        - nceplibs-g2c
+        - geotiff
+        - libtiff
+        - cairo
+        - readline
+        - ncurses
+        - libpng
+        - zlib
+        - libjpeg-turbo
+        - jasper
+        - libgd
+        - libxml2
+        - curl
+        - shapelib
+
+  - package:
+      name: grads
+    inherit: grads-build
+    build:
+      number: 0
+      skip: [not linux]
+      files:
+        - bin/grads
+        - bin/gribmap
+        - bin/stnmap
+        - bin/gribscan
+        - bin/grib2scan
+        - bin/bufrscan
+        - lib/libgxd*.so*
+        - lib/libgxp*.so*
+        - lib/libgradspy.so*
+        - share/grads
+        - etc/conda/activate.d/grads-env.sh
+        - etc/conda/deactivate.d/grads-env.sh
+    requirements:
+      run:
+        - libnetcdf
+        - hdf5
+        - hdf4
+        - libudunits2
+        - g2clib
+        - nceplibs-g2c
+        - geotiff
+        - libtiff
+        - jasper
+        - cairo
+        - libcurl
+        - readline
+        - libpng
+        - ncurses
+        - libgd
+        - shapelib
+        - xorg-libice
+        - xorg-libsm
+        - xorg-libx11
+        - xorg-libxext
+    tests:
+      - script:
+          - printf "q config\nquit\n" | grads -bl | grep "grib2.*geotiff shapefile"
+          - test -x "$PREFIX/bin/gribmap"
+          - test -f "$PREFIX/share/grads/udpt"
+          - test -f "$PREFIX/lib/libgradspy.so"
+
+  - package:
+      name: gradspy
+    inherit: grads-build
+    build:
+      number: 0
+      skip: [not linux]
+      script:
+        - install -Dm644 src/gradspy.py "${SP_DIR}/gradspy.py"
+      files:
+        - lib/python*/site-packages/gradspy.py
+    requirements:
+      host:
+        - python >=3.9
+      run:
+        - python >=3.9
+        - numpy >=1.23
+        - pandas
+        - xarray
+        - grads ==${{ version }}
+    tests:
+      - python:
+          imports:
+            - gradspy
+      - script:
+          - python -c "from gradspy import GrADS; print(GrADS)"
+
+about:
+  homepage: https://wetterzentrale.de/grads/doc/gadoc.html
+  documentation: https://wetterzentrale.de/grads/doc/gadoc.html
+  repository: https://github.com/RogierFloors/GrADS
+  license: GPL-2.0-only
+  license_file: COPYRIGHT
+  summary: Grid Analysis and Display System
+  description: |
+    GrADS is an interactive desktop tool for access, manipulation, and
+    visualization of earth science data.
+
+extra:
+  recipe-maintainers:
+    - RogierFloors

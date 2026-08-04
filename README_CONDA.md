@@ -1,4 +1,28 @@
-# Building GrADS with Conda
+# Installing GrADS with Conda
+
+The recommended way to install GrADS is the conda-forge package:
+
+```bash
+mamba create -n grads -c conda-forge grads
+mamba activate grads
+```
+
+This installs the native GrADS tools and their supported libraries, including
+GRIB2, NetCDF/HDF, GeoTIFF, shapefile, Cairo, and the print/display plugins.
+For the optional Python interface:
+
+```bash
+mamba install -n grads -c conda-forge gradspy
+```
+
+Verify the installation with:
+
+```bash
+printf "'q config'\n'quit'\n" | grads -bl
+```
+
+The source-build instructions below are intended for package maintainers and
+developers who need to build or test the recipe locally.
 
 This branch adds conda packaging for GrADS 2.2.3. The goal is to make GrADS
 build reproducibly with the native libraries it needs, then use that recipe as
@@ -76,7 +100,7 @@ example:
 ~/miniforge3/conda-bld/noarch/gradspy-2.2.3-<build>.conda
 ```
 
-## Install and Test Locally
+## Install and Test a Local Build
 
 Create a clean environment:
 
@@ -203,8 +227,7 @@ The staged recipe is intentionally conservative for the first conda-forge PR:
 - `grads` as the native package output
 - `gradspy` as a separate noarch Python output
 - GRIB2 compatibility symlink retained
-- `g2clib` / `nceplibs-g2c` pinned for the initial submission because the build
-  relies on their library naming and ABI
+- `g2clib` / `nceplibs-g2c` compatibility handled without version pins
 
 ## Path to Conda-Forge Acceptance
 
@@ -284,4 +307,4 @@ printf "'q config'\n'quit'\n" | "$CONDA_PREFIX/bin/grads" -bl
 
 - Conda documentation: https://docs.conda.io/
 - Conda-forge staged-recipes: https://github.com/conda-forge/staged-recipes
-- GrADS documentation: http://cola.gmu.edu/grads/
+- GrADS documentation: https://wetterzentrale.de/grads/doc/gadoc.html

@@ -1,11 +1,10 @@
 #!/bin/bash
 set -ex
 
-# conda-forge's g2clib/nceplibs-g2c package provides libg2c, but GrADS
-# configure and link checks look for libgrib2c.
-if [[ -f "${PREFIX}/lib/libg2c.so" && ! -f "${PREFIX}/lib/libgrib2c.so" ]]; then
-  ln -s libg2c.so "${PREFIX}/lib/libgrib2c.so"
-fi
+# nceplibs-g2c provides libg2c, but GrADS' configure check looks specifically
+# in ${PREFIX}/lib for libgrib2c. The linked binaries use libg2c.so.0 through
+# its SONAME, so remove this build-only compatibility link before packaging.
+ln -s libg2c.so "${PREFIX}/lib/libgrib2c.so"
 
 SUPPLIBS="${PREFIX}" ./configure \
   --prefix="${PREFIX}" \
@@ -21,10 +20,9 @@ SUPPLIBS="${PREFIX}" ./configure \
 
 make -j"${CPU_COUNT:-1}"
 make install
+rm -f "${PREFIX}/lib/libgrib2c.so"
 
 find "${PREFIX}/lib" -name '*.la' -delete
-
-install -m 644 src/gradspy.py "${SP_DIR}/gradspy.py"
 
 mkdir -p "${PREFIX}/share/grads"
 cp -r data/* "${PREFIX}/share/grads/"

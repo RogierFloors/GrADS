@@ -144,7 +144,7 @@ gaint gxload(char *gxdopt, char *gxpopt) {
       printf("  * No entry with \"gxdisplay %s\" in the default User Defined Plug-in Table: %s\n",gxdopt,cname);
       fclose(cfile);
     }
-    printf("  Please read the documentation at http://cola.gmu.edu/grads/gadoc/plugins.html\n");
+    printf("  Please read the documentation at https://wetterzentrale.de/grads/doc/plugins.html\n");
     return(1);
   }
   dlerror();
@@ -184,7 +184,7 @@ gaint gxload(char *gxdopt, char *gxpopt) {
       printf("  * No entry with \"gxprint %s\" in the default User Defined Plug-in Table: %s\n",gxpopt,cname);
       fclose(cfile);
     }
-    printf("  Please read the documentation at http://cola.gmu.edu/grads/gadoc/plugins.html\n");
+    printf("  Please read the documentation at https://wetterzentrale.de/grads/doc/plugins.html\n");
     return(1);
   }
   dlerror();

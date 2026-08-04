@@ -14,7 +14,7 @@ conda-forge.
    the fork's `recipes/grads`, and open a pull request.
 
 4. Watch the CI logs. The first likely review points are Linux-only support,
-   the `g2clib`/`nceplibs-g2c` pin used for GRIB2 compatibility, and whether
+   the `g2clib`/`nceplibs-g2c` compatibility handling, and whether
    `gradspy` should remain a separate output.
 
 ## Review notes
@@ -25,8 +25,8 @@ conda-forge.
   Python runtime dependencies; the native shared library remains in `grads`.
 - GRIB2 support requires a compatibility symlink because conda-forge provides
   `libg2c`, while GrADS checks for `libgrib2c`.
-- `g2clib`/`nceplibs-g2c` stay pinned for the initial submission because this
-  build relies on their library naming and GRIB2 ABI.
+- `g2clib`/`nceplibs-g2c` are unpinned so conda-forge's global pinning and run
+  exports select the supported GRIB2 ABI.
 
 To compute the SHA256 for a GitHub archive:
 

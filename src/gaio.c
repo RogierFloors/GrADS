@@ -2508,7 +2508,7 @@ gaint gancsetup (void) {
 		gaprnt(1,"*** There are two ways to control the cache size: \n");
 		gaprnt(1,"*** add a CACHESIZE entry to the descriptor file \n");
 		gaprnt(1,"*** or change the scale factor with 'set cachesf' \n");
-		gaprnt(1,"*** Please read http://cola.gmu.edu/grads/gadoc/compression.html \n");
+		gaprnt(1,"*** Please read https://wetterzentrale.de/grads/doc/compression.html \n");
 	      }
 	    }
 	  }
@@ -3536,7 +3536,7 @@ gaint h5setup(void) {
                 gaprnt(1,"*** There are two ways to control the cache size: \n");
                 gaprnt(1,"*** add a CACHESIZE entry to the descriptor file \n");
 		gaprnt(1,"*** or change the scale factor with 'set cachesf' \n");
-                gaprnt(1,"*** Please read http://cola.gmu.edu/grads/gadoc/compression.html \n");
+                gaprnt(1,"*** Please read https://wetterzentrale.de/grads/doc/compression.html \n");
               }
             }
           }

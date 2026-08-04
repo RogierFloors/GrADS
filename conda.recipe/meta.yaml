@@ -62,7 +62,7 @@ requirements:
     - shapelib
 
 about:
-  home: http://cola.gmu.edu/grads/
+  home: https://wetterzentrale.de/grads/doc/gadoc.html
   license: GPL-2.0
   summary: Grid Analysis and Display System (GrADS)
 
@@ -81,6 +81,6 @@ outputs:
         - xarray
         - grads =={{ version }}
     about:
-      home: http://cola.gmu.edu/grads/
+      home: https://wetterzentrale.de/grads/doc/gadoc.html
       license: GPL-2.0
       summary: Python interface to GrADS (Grid Analysis and Display System)
