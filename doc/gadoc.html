@@ -18,6 +18,16 @@ native executable, GRIB/NetCDF/HDF/GeoTIFF/shapefile support, data files, and
 Cairo graphics plug-ins.</p>
 <pre>mamba create -n grads -c conda-forge grads
 mamba activate grads</pre>
+<p>Activating the environment automatically sets <code>GADDIR</code>,
+<code>GAUDPT</code>, and <code>GAGPY</code> to the data, plug-in table, and
+GradsPy library installed in that environment. Do not set these variables
+manually for a conda-forge installation. If they were previously configured
+for another GrADS installation, activation temporarily replaces them and
+deactivation restores their previous values.</p>
+<p>Run GrADS after <code>mamba activate grads</code>, or without activating an
+interactive shell by using <code>mamba run -n grads grads</code>. Invoking an
+environment's executable directly from an unactivated shell does not apply its
+activation settings and may select data or plug-ins from another installation.</p>
 <p>Verify the installation:</p>
 <pre>printf "q config\nquit\n" | grads -bl</pre>
 <p>For the optional Python interface:</p>

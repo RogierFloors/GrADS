@@ -1,74 +1,61 @@
 #!/bin/bash
 set -ex
 
-# g2clib provides libg2c but GrADS configure expects libgrib2c
-if [ ! -e "$PREFIX/lib/libg2c.so" ] && [ ! -e "$PREFIX/lib/libg2c.so.0" ]; then
-  echo "ERROR: nceplibs-g2c was not installed; libg2c is missing" >&2
-  exit 1
-fi
-if [ ! -e "$PREFIX/lib/libgrib2c.so" ]; then
-  if [ -e "$PREFIX/lib/libg2c.so" ]; then
-    ln -s libg2c.so "$PREFIX/lib/libgrib2c.so"
-  else
-    ln -s libg2c.so.0 "$PREFIX/lib/libgrib2c.so"
-  fi
-fi
+# nceplibs-g2c provides libg2c, but GrADS' configure check looks specifically
+# in ${PREFIX}/lib for libgrib2c. The linked binaries use libg2c.so.0 through
+# its SONAME, so remove this build-only compatibility link before packaging.
+ln -s libg2c.so "${PREFIX}/lib/libgrib2c.so"
 
-SUPPLIBS="$PREFIX" ./configure \
-  --prefix="$PREFIX" \
-  --with-netcdf="$PREFIX" \
-  --with-hdf5="$PREFIX" \
+SUPPLIBS="${PREFIX}" ./configure \
+  --prefix="${PREFIX}" \
+  --with-netcdf="${PREFIX}" \
+  --with-hdf5="${PREFIX}" \
   --enable-dyn-supplibs \
-  CAIRO_CFLAGS="-I$PREFIX/include/cairo -I$PREFIX/include/freetype2" \
-  CAIRO_LIBS="-L$PREFIX/lib -lcairo" \
-  GD_CFLAGS="-I$PREFIX/include" \
-  GD_LIBS="-L$PREFIX/lib -lgd" \
-  CPPFLAGS="-I$PREFIX/include -I$PREFIX/include/freetype2" \
-  LDFLAGS="-L$PREFIX/lib -Wl,-rpath,$PREFIX/lib"
+  CAIRO_CFLAGS="-I${PREFIX}/include/cairo -I${PREFIX}/include/freetype2" \
+  CAIRO_LIBS="-L${PREFIX}/lib -lcairo" \
+  GD_CFLAGS="-I${PREFIX}/include" \
+  GD_LIBS="-L${PREFIX}/lib -lgd" \
+  CPPFLAGS="-I${PREFIX}/include -I${PREFIX}/include/freetype2" \
+  LDFLAGS="-L${PREFIX}/lib -Wl,-rpath,${PREFIX}/lib"
 
 make -j"${CPU_COUNT:-1}"
 make install
+rm -f "${PREFIX}/lib/libgrib2c.so"
 
-# Install Python interface; claimed by the grads-python noarch output
-install -m 644 src/gradspy.py "$SP_DIR/gradspy.py"
+find "${PREFIX}/lib" -name '*.la' -delete
 
-# Install data files
-mkdir -p "$PREFIX/share/grads"
-cp -r data/* "$PREFIX/share/grads/"
+mkdir -p "${PREFIX}/share/grads"
+cp -r data/* "${PREFIX}/share/grads/"
 
-# Create UDPT
-cat > "$PREFIX/share/grads/udpt" <<'EOF'
+cat > "${PREFIX}/share/grads/udpt" <<EOF
 # Type     Name     Full path to shared object file
-gxdisplay  Cairo    %s/lib/libgxdCairo.so
-gxdisplay  X11      %s/lib/libgxdX11.so
-gxdisplay  gxdummy  %s/lib/libgxdummy.so
+gxdisplay  Cairo    ${PREFIX}/lib/libgxdCairo.so
+gxdisplay  X11      ${PREFIX}/lib/libgxdX11.so
+gxdisplay  gxdummy  ${PREFIX}/lib/libgxdummy.so
 *
-gxprint    Cairo    %s/lib/libgxpCairo.so
-gxprint    GD       %s/lib/libgxpGD.so
-gxprint    gxdummy  %s/lib/libgxdummy.so
-EOF
-# Replace %s placeholders with $PREFIX (escaped for sed)
-sed -i "s|%s|$PREFIX|g" "$PREFIX/share/grads/udpt"
-
-# Create conda activation/deactivation scripts
-mkdir -p "$PREFIX/etc/conda/activate.d"
-mkdir -p "$PREFIX/etc/conda/deactivate.d"
-
-cat > "$PREFIX/etc/conda/activate.d/grads-env.sh" <<EOF
-#!/bin/bash
-export GADDIR_BACKUP="\$GADDIR"
-export GAUDPT_BACKUP="\$GAUDPT"
-export GAGPY_BACKUP="\$GAGPY"
-export GADDIR="$PREFIX/share/grads"
-export GAUDPT="$PREFIX/share/grads/udpt"
-export GAGPY="$PREFIX/lib/libgradspy.so"
+gxprint    Cairo    ${PREFIX}/lib/libgxpCairo.so
+gxprint    GD       ${PREFIX}/lib/libgxpGD.so
+gxprint    gxdummy  ${PREFIX}/lib/libgxdummy.so
 EOF
 
-cat > "$PREFIX/etc/conda/deactivate.d/grads-env.sh" <<EOF
+mkdir -p "${PREFIX}/etc/conda/activate.d"
+mkdir -p "${PREFIX}/etc/conda/deactivate.d"
+
+cat > "${PREFIX}/etc/conda/activate.d/grads-env.sh" <<EOF
 #!/bin/bash
-export GADDIR="\$GADDIR_BACKUP"
-export GAUDPT="\$GAUDPT_BACKUP"
-export GAGPY="\$GAGPY_BACKUP"
+export GADDIR_BACKUP="\${GADDIR}"
+export GAUDPT_BACKUP="\${GAUDPT}"
+export GAGPY_BACKUP="\${GAGPY}"
+export GADDIR="${PREFIX}/share/grads"
+export GAUDPT="${PREFIX}/share/grads/udpt"
+export GAGPY="${PREFIX}/lib/libgradspy.so"
+EOF
+
+cat > "${PREFIX}/etc/conda/deactivate.d/grads-env.sh" <<'EOF'
+#!/bin/bash
+export GADDIR="${GADDIR_BACKUP}"
+export GAUDPT="${GAUDPT_BACKUP}"
+export GAGPY="${GAGPY_BACKUP}"
 unset GADDIR_BACKUP
 unset GAUDPT_BACKUP
 unset GAGPY_BACKUP

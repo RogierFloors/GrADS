@@ -6,8 +6,7 @@
 
 GrADS is distributed freely and is copyrighted under the GNU Public License. 
 Please read the COPYRIGHT file for more complete information. 
-For installation, use the conda-forge package documented at
-https://wetterzentrale.de/grads/doc/gadoc.html
+For installation, use the conda-forge package documented in README_CONDA.md.
 
 Pre-compiled binary executables are not provided now that the 
 dependent libraries are no longer statically linked. Please see the 

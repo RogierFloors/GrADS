@@ -27,7 +27,10 @@ mamba install -c conda-forge gradspy</pre>
 <p>Test the installation with:</p>
 <pre>python -c "from gradspy import GrADS; print(GrADS)"</pre>
 <p>The conda packages provide the native library and runtime integration;
-manual compilation and library-path exports are not required.</p>
+manual compilation and library-path exports are not required. The environment
+activation hook sets <code>GAGPY</code> to the packaged GradsPy library, along
+with <code>GADDIR</code> and <code>GAUDPT</code> for the native GrADS runtime.
+Do not set these variables manually when using the conda-forge packages.</p>
 <p>
 <h2>GradsPy Methods</h2>
 <p>Once you have imported GradsPy into Python, there are three methods for interacting with GrADS: start, cmd, and result. </p>
