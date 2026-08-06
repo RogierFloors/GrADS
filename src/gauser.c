@@ -1173,6 +1173,48 @@ size_t sz;
 static gadouble justx[9] = {0.0,0.5,1.0,0.0,0.5,1.0,0.0,0.5,1.0};
 static gadouble justy[9] = {0.0,0.0,0.0,0.5,0.5,0.5,1.0,1.0,1.0};
 
+#if USESHP==1
+/* Project one ring from a shapefile object into GrADS page coordinates. */
+static gadouble *gaprjshpring (SHPObject *shp, gaint part, gaint haveinfo,
+                              gadouble lnfact, gadouble llinc, gaint *newcnt) {
+gadouble *pxy,*newxy;
+gaint begv,endv,cnt,j,v;
+
+  if (haveinfo) {
+    begv=shp->panPartStart[part];
+    if (part==shp->nParts-1) endv=shp->nVertices-1;
+    else endv=shp->panPartStart[part+1]-1;
+  }
+  else {
+    begv=0;
+    endv=shp->nVertices-1;
+  }
+  cnt=endv-begv+1;
+  pxy=(gadouble *)galloc(2*(cnt+1)*sizeof(gadouble),"shpxy");
+  if (pxy==NULL) return NULL;
+  j=0;
+  for (v=begv; v<=endv; v++) {
+    pxy[j++]=shp->padfX[v]+lnfact;
+    pxy[j++]=shp->padfY[v];
+  }
+  if (*pxy!=*(pxy+(cnt-1)*2) || *(pxy+1)!=*(pxy+(cnt-1)*2+1)) {
+    *(pxy+cnt*2)=*pxy;
+    *(pxy+cnt*2+1)=*(pxy+1);
+    cnt++;
+  }
+  newxy=gxmpoly(pxy,cnt,llinc,newcnt);
+  gree(pxy,"shpxy");
+  if (newxy==NULL) return NULL;
+  if (*newxy!=*(newxy+(*newcnt-1)*2) ||
+      *(newxy+1)!=*(newxy+(*newcnt-1)*2+1)) {
+    *(newxy+*newcnt*2)=*newxy;
+    *(newxy+*newcnt*2+1)=*(newxy+1);
+    (*newcnt)++;
+  }
+  return newxy;
+}
+#endif
+
 gaint gadraw (char *cmd, struct gacmn *pcm) {
 struct gbtn btn;
 struct gdmu dmu;
@@ -1185,7 +1227,8 @@ size_t sz;
 #if USESHP==1
 SHPHandle shpid=NULL;
 SHPObject *shp=NULL;
-gadouble *pxy,newx,newy,lnfact;
+gadouble *pxy,newx,newy,lnfact,**ringxy,*allxy;
+gaint *ringcnt,*ringstarts,totalcnt,ringnum;
 int shape,begshp,endshp=0,shpcnt,shptype,j,v,begv,endv,p,haveinfo,numparts,ival;
 char shparg[4096];
 #endif
@@ -1503,6 +1546,90 @@ char shparg[4096];
 	else {
 	  numparts=shp->nParts;
 	}
+        /* Filled polygons must be rendered as one compound path.  Filling
+           each part independently turns interior rings (holes) into filled
+           polygons. */
+        if (shape==3 && pcm->fillpoly!=-1) {
+          ringxy=(gadouble **)galloc(sizeof(gadouble *)*numparts,"shpringxy");
+          ringcnt=(gaint *)galloc(sizeof(gaint)*numparts,"shpringcnt");
+          ringstarts=(gaint *)galloc(sizeof(gaint)*numparts,"shpringstarts");
+          if (ringxy==NULL || ringcnt==NULL || ringstarts==NULL) {
+            if (ringxy) gree(ringxy,"shpringxy");
+            if (ringcnt) gree(ringcnt,"shpringcnt");
+            if (ringstarts) gree(ringstarts,"shpringstarts");
+            gaprnt(0,"DRAW error: Memory allocation failed for shape rings\n");
+            SHPDestroyObject(shp); shp=NULL;
+            SHPClose(shpid);
+            return(1);
+          }
+
+          lnfact=0.0;
+          while (shp->dfXMax+lnfact > pcm->dmin[0]) lnfact-=360.0;
+          lnfact+=360.0;
+          while (shp->dfXMin+lnfact < pcm->dmax[0]) {
+            if (shp->dfXMax+lnfact < pcm->dmin[0]) {
+              lnfact+=360.0;
+              continue;
+            }
+            totalcnt=0;
+            ringnum=0;
+            for (p=0; p<numparts; p++) {
+              ringxy[ringnum]=gaprjshpring(shp,p,haveinfo,lnfact,llinc,
+                                           ringcnt+ringnum);
+              if (ringxy[ringnum]==NULL) {
+                for (j=0; j<ringnum; j++) gree(ringxy[j],"newxy");
+                gree(ringxy,"shpringxy");
+                gree(ringcnt,"shpringcnt");
+                gree(ringstarts,"shpringstarts");
+                gaprnt(0,"DRAW SHP error: Memory allocation in gxmpoly\n");
+                SHPDestroyObject(shp); shp=NULL;
+                SHPClose(shpid);
+                return(1);
+              }
+              if (ringcnt[ringnum]>=3) {
+                ringstarts[ringnum]=totalcnt;
+                totalcnt+=ringcnt[ringnum];
+                ringnum++;
+              }
+              else {
+                gree(ringxy[ringnum],"newxy");
+              }
+            }
+            allxy=(gadouble *)galloc(sizeof(gadouble)*totalcnt*2,"shpcompound");
+            if (allxy==NULL) {
+              for (j=0; j<ringnum; j++) gree(ringxy[j],"newxy");
+              gree(ringxy,"shpringxy");
+              gree(ringcnt,"shpringcnt");
+              gree(ringstarts,"shpringstarts");
+              gaprnt(0,"DRAW error: Memory allocation failed for compound polygon\n");
+              SHPDestroyObject(shp); shp=NULL;
+              SHPClose(shpid);
+              return(1);
+            }
+            for (p=0; p<ringnum; p++)
+              memcpy(allxy+ringstarts[p]*2,ringxy[p],
+                     sizeof(gadouble)*ringcnt[p]*2);
+
+            gxcolr(pcm->fillpoly);
+            gxfillrings(allxy,ringstarts,ringnum,totalcnt);
+            gree(allxy,"shpcompound");
+
+            gxwide(pcm->linthk);
+            gxstyl(pcm->linstl);
+            gxcolr(pcm->lincol);
+            for (p=0; p<ringnum; p++) {
+              gxplot(*(ringxy[p]),*(ringxy[p]+1),3);
+              for (j=1; j<ringcnt[p]; j++)
+                gxplot(*(ringxy[p]+j*2),*(ringxy[p]+j*2+1),2);
+              gree(ringxy[p],"newxy");
+            }
+            lnfact+=360.0;
+          }
+          gree(ringxy,"shpringxy");
+          gree(ringcnt,"shpringcnt");
+          gree(ringstarts,"shpringstarts");
+        }
+        else {
 	/* loop over all parts  */
 	for (p=0; p<numparts; p++) {
 	  if (haveinfo) {
@@ -1610,6 +1737,7 @@ char shparg[4096];
 	    lnfact += 360.0;
 	  }
 	} /* end of loop over numparts */
+        }
       }
       /* The only type that should get trapped here is a MultiPatch (value 31) */
       else {
@@ -8678,7 +8806,12 @@ SHPHandle gaopshp(char *shparg) {
   }
   
   /* final option: try prepending GADDIR */
-  if ((id=SHPOpen(gxgnam(shparg),"rb"))!=NULL) return(id);
+  fname=gxgnam(shparg);
+  if (fname!=NULL) {
+    id=SHPOpen(fname,"rb");
+    free(fname);
+    if (id!=NULL) return(id);
+  }
  
   /* give up */
   snprintf(pout,1255,"Error: Unable to open shapefile \"%s\" \n",shparg);
@@ -8739,7 +8872,12 @@ DBFHandle gaopdbf(char *shparg) {
   }
   
   /* final option: try prepending GADDIR */
-  if ((id=DBFOpen(gxgnam(shparg),"rb"))!=NULL) return(id);
+  fname=gxgnam(shparg);
+  if (fname!=NULL) {
+    id=DBFOpen(fname,"rb");
+    free(fname);
+    if (id!=NULL) return(id);
+  }
  
   /* give up */
   snprintf(pout,1255,"Error: Unable to open shapefile \"%s\" \n",shparg);

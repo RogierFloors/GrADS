@@ -1197,6 +1197,60 @@ gaint i,flag,onum,aflag;
   if (aflag) free(buff);
 }
 
+/* Fill a compound polygon consisting of one or more rings.  Unlike gxfill,
+   clipping is left to the graphics backend so that an interior ring which
+   surrounds the clipping rectangle is not lost.  Ring boundaries are encoded
+   as NaN coordinate pairs for the backend and as additional move operations
+   in the metafile. */
+
+void gxfillrings (gadouble *xy, gaint *starts, gaint nrings, gaint num) {
+gadouble *buff,*out;
+gaint i,j,end,onum;
+
+  if (xy==NULL || starts==NULL || nrings<1 || num<3) return;
+  if (nrings==1) {
+    gxfill(xy,num);
+    return;
+  }
+  onum = num + nrings - 1;
+  buff = (gadouble *)malloc(sizeof(gadouble)*onum*2);
+  if (buff==NULL) {
+    printf("Memory allocation error in gxfillrings.  Can't fill polygon\n");
+    return;
+  }
+
+  out = buff;
+  for (i=0; i<nrings; i++) {
+    end = (i+1<nrings) ? starts[i+1] : num;
+    if (i) {
+      *out = NAN;
+      *(out+1) = NAN;
+      out += 2;
+    }
+    for (j=starts[i]; j<end; j++) {
+      gxvcon(*(xy+j*2),*(xy+j*2+1),out,out+1);
+      out += 2;
+    }
+  }
+
+  hout1(-7,onum);
+  out = buff;
+  for (i=0; i<nrings; i++) {
+    if (i) out += 2;
+    end = (i+1<nrings) ? starts[i+1] : num;
+    hout2(-10,*out,*(out+1));
+    out += 2;
+    for (j=starts[i]+1; j<end; j++) {
+      hout2(-11,*out,*(out+1));
+      out += 2;
+    }
+  }
+  hout0(-8);
+
+  if (intflg) dsubs.gxdfil(buff,onum);
+  free(buff);
+}
+
 /* Perform edge interpolation for clipping  */
 
 void bdterp (gadouble x1, gadouble y1, gadouble x2, gadouble y2,
@@ -1401,4 +1455,3 @@ size_t sz;
 
   return (fname);
 }
-

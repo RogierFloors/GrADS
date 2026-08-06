@@ -371,6 +371,7 @@ void gxqrgb (gaint, gaint *, gaint *, gaint *);
 gaint gxqstl (void);
 void gxmark (gaint, gadouble, gadouble, gadouble);
 void gxfill (gadouble *, gaint);
+void gxfillrings (gadouble *, gaint *, gaint, gaint);
 void bdterp (gadouble, gadouble, gadouble, gadouble, gadouble *, gadouble *);
 void gxptrn (int, int, int);
 char *gxgsym(char *);
@@ -574,6 +575,5 @@ void gxsetpatt (gaint);
 void gxdXflush (void);
 void gxdclip (gadouble, gadouble, gadouble, gadouble);
 gaint gxdacol (gaint, gaint, gaint, gaint, gaint);
-
 
 
