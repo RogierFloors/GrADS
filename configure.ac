@@ -171,6 +171,11 @@ echo ---------------------------------------------------------
 
 AC_CHECK_LIB(m,cos,, AC_MSG_ERROR([Fatal: Math library not found]))
 AC_PATH_XTRA
+AC_SEARCH_LIBS([dlopen], [dl],
+  [DLOPEN_LIBS="$ac_cv_search_dlopen"],
+  [AC_MSG_ERROR([Fatal: dynamic loading support not found])])
+AS_IF([test "x$DLOPEN_LIBS" = "xnone required"], [DLOPEN_LIBS=""])
+AC_SUBST([DLOPEN_LIBS])
 
 echo
 
@@ -544,10 +549,14 @@ if test "Z$ga_supplib_dir" != "Z" ; then
   echo looking in $ga_supplib_dir 
     GA_SET_FLAGS([])
     AC_CHECK_HEADER(grib2.h,
-    [ AC_CHECK_LIB([grib2c], [main], 
-      [ use_grib2=yes 
-#        GA_SET_LIB_VAR([grib2_libs], [grib2c jasper png z])
+    [ AC_CHECK_LIB([grib2c], [main],
+      [ use_grib2=yes
         GA_SET_DYNLIB_VAR([grib2_libs], [grib2c jasper png z])
+      ],
+      [ AC_CHECK_LIB([g2c], [main],
+        [ use_grib2=yes
+          GA_SET_DYNLIB_VAR([grib2_libs], [g2c jasper png z])
+        ])
       ])
     ])
     GA_UNSET_FLAGS

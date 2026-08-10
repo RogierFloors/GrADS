@@ -314,7 +314,7 @@ int main (int argc, char *argv[])  {
   /* Inform gaio.c what the global scale factor for netcdf4/hdf5 cache */
   setcachesf(gcmn.cachesf);
 
-#if !defined(__CYGWIN32__) && !defined(__GO32__)
+#if !defined(_WIN32) && !defined(__CYGWIN32__) && !defined(__GO32__)
   signal(CPULIMSIG, gasigcpu) ;  /* CPU time limit signal; just exit */
 #endif
   
@@ -816,4 +816,3 @@ struct gaupb *upb;
   }
   return (NULL);
 }
-

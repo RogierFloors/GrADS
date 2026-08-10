@@ -40,7 +40,11 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#ifdef _WIN32
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #include <sys/types.h>
 #include "grads.h"
 #include "gagmap.h"

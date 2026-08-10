@@ -2102,6 +2102,11 @@ char *mbuf, *ch;
    return (mbuf);
 }
 
+/* Release a command result in the same C runtime that allocated it. */
+void gapystrfree (void *buffer) {
+  free(buffer);
+}
+
 /* Handle exec command.  Read exec file, then recursively
    call gacmd.  */
 

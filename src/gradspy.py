@@ -2,7 +2,7 @@
 gradspy - Python interface to GrADS using ctypes + xarray.
 
 Provides the :class:`GrADS` class for interacting with the GrADS (Grid
-Analysis and Display System) engine via its shared library (libgradspy.so).
+Analysis and Display System) engine via its shared library.
 All grid results are returned as :class:`xarray.DataArray` objects with
 named dimension coordinates (``lon``, ``lat``, ``lev``, ``time``,
 ``ensemble``).  Non-varying dimensions are attached as scalar coordinates
@@ -12,7 +12,8 @@ The library to load is resolved in this order:
 
 1. The ``lib`` argument to :class:`GrADS`.
 2. The ``$GAGPY`` environment variable.
-3. ``libgradspy.so`` on the system library path.
+3. The platform default (``libgradspy.so``, ``libgradspy.dylib``, or
+   ``gradspy.dll``) on the system library path.
 
 Typical usage::
 
@@ -36,6 +37,7 @@ more information.
 
 import ctypes
 import os
+import sys
 from typing import Optional
 
 import numpy as np
@@ -135,16 +137,21 @@ class GrADS:
         Parameters
         ----------
         lib : str, optional
-            Full path to ``libgradspy.so``.  Falls back to ``$GAGPY``, then
-            ``libgradspy.so`` on the system library path.
+            Full path to the GradsPy shared library. Falls back to ``$GAGPY``,
+            then the platform-specific library name on the system path.
         """
-        lib_path = lib or os.environ.get("GAGPY", "libgradspy.so")
-        self._lib = ctypes.CDLL(lib_path, mode=ctypes.RTLD_GLOBAL)
+        if sys.platform == "win32":
+            default_library = "gradspy.dll"
+        elif sys.platform == "darwin":
+            default_library = "libgradspy.dylib"
+        else:
+            default_library = "libgradspy.so"
 
-        # libc free() for releasing strings malloc'd inside GrADS
-        self._free = ctypes.CDLL(None).free
-        self._free.argtypes = [ctypes.c_void_p]
-        self._free.restype  = None
+        lib_path = lib or os.environ.get("GAGPY", default_library)
+        if sys.platform == "win32":
+            self._lib = ctypes.CDLL(lib_path)
+        else:
+            self._lib = ctypes.CDLL(lib_path, mode=ctypes.RTLD_GLOBAL)
 
         self._setup_signatures()
         self._started = False
@@ -198,7 +205,7 @@ class GrADS:
         if not ptr:
             return ""
         text = ctypes.cast(ptr, ctypes.c_char_p).value.decode()
-        self._free(ptr)
+        self._lib.gapystrfree(ptr)
         return text
 
     def result(self, expr: str) -> xr.DataArray:
@@ -386,6 +393,9 @@ class GrADS:
 
         lib.gagsdo.restype   = ctypes.c_void_p   # malloc'd; freed after copy
         lib.gagsdo.argtypes  = [ctypes.c_char_p, ctypes.POINTER(ctypes.c_int)]
+
+        lib.gapystrfree.restype  = None
+        lib.gapystrfree.argtypes = [ctypes.c_void_p]
 
         lib.gadoexpr.restype  = ctypes.c_int
         lib.gadoexpr.argtypes = [ctypes.c_char_p, ctypes.POINTER(_PyGaGrid)]
@@ -613,4 +623,3 @@ class GrADS:
                 pygr.tincr = (t1.year - t0.year) * 12 + (t1.month - t0.month)
         else:
             pygr.tincr = 1
-

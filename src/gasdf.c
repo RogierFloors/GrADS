@@ -22,7 +22,11 @@
 #define DFLTORIGIN " since 1-1-1 00:00:0.0"
 
 #include <stdlib.h>
+#ifdef _WIN32
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <math.h>

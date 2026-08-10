@@ -49,7 +49,7 @@ libgxdummy_la_SOURCES  = gxdummy.c
 libgxdX11_la_SOURCES   = gxX11.c 
 
 ## GrADS source files to be compiled
-grads_SOURCES =	grads.c  gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
+grads_SOURCES =	grads.c ga_dynload.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
 		gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c gautil.c gagx.c \
 		gscrpt.c gamach.c gatxt.c   galloc.c gaddes.c gacfg.c  gaio.c \
                 gauser.c gasdf.c  bufrstn.c gabufr.c gabufrtbl.c \
@@ -66,7 +66,7 @@ EXTRA_grads_SOURCES = gagmap.c gagui.c gsgui.c dodstn.c \
 
 ## Headers must be listed here to be included in the distribution.
 ## The "noinst_" prefix prevents "make install" from trying to do anything with them
-hdr_core  = grads.h  gatypes.h bitmaps.h bitmaps2.h gvt.h wx.h gs.h
+hdr_core  = grads.h gatypes.h ga_dynload.h bitmaps.h bitmaps2.h gvt.h wx.h gs.h
 hdr_ga    = gagmap.h gagui.h gabufr.h gasdf.h gasdf_std_time.h 
 hdr_gx    = gx.h gxGD.h gxC.h gxmap.h 
 
@@ -97,7 +97,7 @@ AM_CPPFLAGS		= -I. -I$(supp_include_dir) $(gui_inc) $(nc_inc) \
 ## libraries needed
 grads_LDADD	      = $(common_ldadd) $(readline_libs) $(grib2_libs) \
 			$(hdf_libs) $(hdf5_libs) $(nc_libs) $(geotiff_libs) \
-			$(shp_libs) $(gadap_libs) $(gui_libs) -ldl 
+			$(shp_libs) $(gadap_libs) $(gui_libs) $(DLOPEN_LIBS)
 
 # print with GD
 if USEGD
@@ -131,7 +131,7 @@ libgxdummy_la_CPPFLAGS = -I.
 ##---------------------------------------------------------------------
 ## GradsPy 
 
-libgradspy_la_SOURCES  = grads.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
+libgradspy_la_SOURCES  = grads.c ga_dynload.c gxsubs.c gxmeta.c  gxchpl.c gxcntr.c gxstrm.c gxdb.c \
 		gxwmap.c gxshad.c gxshad2.c gaexpr.c gafunc.c gautil.c gagx.c \
 		gscrpt.c gamach.c gatxt.c   galloc.c gaddes.c gacfg.c  gaio.c \
                 gauser.c gasdf.c  bufrstn.c gabufr.c gabufrtbl.c \
@@ -147,7 +147,7 @@ libgradspy_la_CPPFLAGS = -I. -I$(SUPPLIBS)/include $(gui_inc) $(geotiff_inc) \
                          $(shp_inc) $(gadap_inc) $(X_CFLAGS) $(XAW_CFLAGS) 
 libgradspy_la_LIBADD   = $(common_ldadd) $(readline_libs) $(grib2_libs) \
 			 $(hdf_libs) $(hdf5_libs) $(nc_libs) $(geotiff_libs) \
-			 $(shp_libs) $(gadap_libs) $(gui_libs) 
+			 $(shp_libs) $(gadap_libs) $(gui_libs) $(DLOPEN_LIBS)
 libgradspy_la_LDFLAGS  = -version-info $(LIBGX_VERSION)
 
 
@@ -195,4 +195,3 @@ grib2scan_LDADD	       = gautil.sa.o gatxt.o $(LDADD) $(readline_libs)
 
 ## bufrscan
 bufrscan_SOURCES       = bufrscan.c gabufr.c gabufrtbl.c gamach.c
-

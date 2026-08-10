@@ -22,9 +22,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <dlfcn.h>
+#include "ga_dynload.h"
 #include "gatypes.h"
 #include "gx.h"
+
+/* Keep the symbol-table initialization below readable. */
+#define dlerror ga_dlerror
+#define dlsym ga_dlsym
 
 char *gaqupb (char *, gaint);
 void gree (void *, char *);
@@ -110,7 +114,7 @@ gaint gxstrt (gadouble xmx, gadouble ymx, gaint batch, gaint hbufsz, char *gxdop
 
 /* Loads the graphics back end shared libraries and define the required subroutines */
 gaint gxload(char *gxdopt, char *gxpopt) {
-  void *phandle=NULL,*dhandle=NULL; 
+  ga_dlhandle phandle=NULL,dhandle=NULL;
   const char *err=NULL,*dname=NULL,*pname=NULL;
   char *cname=NULL;
   FILE *cfile;
@@ -147,11 +151,11 @@ gaint gxload(char *gxdopt, char *gxpopt) {
     printf("  Please read the documentation at https://wetterzentrale.de/grads/doc/plugins.html\n");
     return(1);
   }
-  dlerror();
-  dhandle = dlopen (dname, RTLD_LAZY | RTLD_GLOBAL);
+  ga_dlerror();
+  dhandle = ga_dlopen (dname, GA_RTLD_LAZY | GA_RTLD_GLOBAL);
   if (!dhandle) {
     printf("GX Package Error: dlopen failed to get a a handle on gxdisplay plug-in named \"%s\" \n",gxdopt); 
-    if ((err=dlerror())!=NULL) printf("   %s\n",err); 
+    if ((err=ga_dlerror())!=NULL) printf("   %s\n",err);
     return(2);
   }
 
@@ -187,11 +191,11 @@ gaint gxload(char *gxdopt, char *gxpopt) {
     printf("  Please read the documentation at https://wetterzentrale.de/grads/doc/plugins.html\n");
     return(1);
   }
-  dlerror();
-  phandle = dlopen (pname, RTLD_LAZY);
+  ga_dlerror();
+  phandle = ga_dlopen (pname, GA_RTLD_LAZY);
   if (!phandle) {
     printf("GX Package Error: dlopen failed to get a handle on gxprint plug-in named \"%s\" \n",gxpopt); 
-    if ((err=dlerror())!=NULL) printf("   %s\n",err); 
+    if ((err=ga_dlerror())!=NULL) printf("   %s\n",err);
     return(1);
   }
   
