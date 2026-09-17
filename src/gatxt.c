@@ -1,6 +1,7 @@
 /*
     Copyright (C) 2009 by Arlindo da Silva <dasilva@opengrads.org>
     All Rights Reserved.
+    See file COPYRIGHT for license information.
 
 */
 

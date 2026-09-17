@@ -27,10 +27,8 @@
 #define STDC_HEADERS 1
 #define USECAIRO 1
 #define USEDAP 1
-#define USEFREQ 0
 #define USEGADAP 0
 #define USEGD 1
-#define USEGUI 0
 #define USEHDF 1
 #define USEHDF5 1
 #define USENETCDF 1

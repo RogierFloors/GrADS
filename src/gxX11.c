@@ -106,7 +106,7 @@ static gaint snum;
 static GC gc;
 static XGCValues values;
 static XEvent report;
-Window win=(Window) NULL;    /* used via extern in gagui */
+static Window win=(Window) NULL;
 static Pixmap pmap;
 static Pixmap pmaps[200];
 static XImage *image;

@@ -27,10 +27,6 @@
 #include "hdf5.h"
 #endif 
 
-#if USEGUI == 1
-#include "gagui.h"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -166,26 +162,6 @@ FILE *pdefid=NULL;
 	   cmpwrd("r",       cmd)    ) {
     retcod = gahistory(cmd, com, pcm);
     goto retrn;
-#endif
-#if USEGUI == 1
-  } 
-  else if (cmpwrd("gui",cmd)) {
-    char *tmp ;
-    if ((cmd=nxtwrd(com)) == NULL) {
-      gaprnt (0,"GUI error:  No file name specified\n");
-      retcod = 1;
-      goto retrn;
-    } else {
-      gaint lentmp ;
-
-      lentmp = (gaint) strlen(cmd) ;
-      sz = lentmp + 1;
-      tmp = (char *) galloc(sz,"gui") ;
-      getwrd(tmp, cmd, lentmp) ;
-      retcod = Custom_GUI(tmp);
-      if(tmp) gree(tmp,"f186");
-      goto retrn;
-    }
 #endif
 #if GRIB2
   } else if (cmpwrd("flush",cmd)) {

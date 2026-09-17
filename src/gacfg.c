@@ -98,9 +98,6 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
 #if USEGADAP==1
  strcat(cmd,",stn");
 #endif
-#if USEGUI==1
- strcat(cmd," athena");
-#endif
 #if GEOTIFF==1
  strcat(cmd," geotiff");
 #endif
@@ -130,10 +127,6 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
    gaprnt(verbose,"  +  Byte order is LITTLE ENDIAN \n");
 #endif
 
-#if USEGUI==1
-   gaprnt(verbose,"  +  Athena Widget GUI ENABLED \n");
-#endif
- 
 #if READLINE==1
    gaprnt(verbose,"  +  Command line editing ENABLED \n");
 #else
@@ -198,4 +191,3 @@ snprintf(cmd,255,"Config: v%s",GRADS_VERSION);
 
  gaprnt(verbose,"The 'q gxconfig' command returns Graphics configuration information\n");
 }
-

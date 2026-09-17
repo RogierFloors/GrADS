@@ -133,17 +133,11 @@
 /* Enable OPeNDAP for grids */
 #define USEDAP 0
 
-/* Use GetFile from freq */
-/* #undef USEFREQ */
-
 /* Enable OPeNDAP for station data */
 /* #undef USEGADAP */
 
 /* Enable gd */
 #define USEGD 0
-
-/* Enable GUI widgets */
-#define USEGUI 0
 
 /* Enable hdf4 */
 #define USEHDF 1

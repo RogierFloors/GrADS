@@ -35,10 +35,6 @@
 #include <signal.h>
 #include "grads.h"
 
-#if USEGUI == 1
-#include "gagui.h"
-#endif
-
 #if READLINE ==1
 #include <time.h>
 #include <readline/history.h>
@@ -331,12 +327,6 @@ int main (int argc, char *argv[])  {
   
   signal(2,gasig);                      /* Trap cntrl c */
   
-#if USEGUI == 1
-  if (!ipcflg) 
-    gagui_main (argc, argv);   /*ams Initializes GAGUI, and if the environment
-				 variable GAGUI is set it starts a GUI
-				 script. Otherwise, it just returns. ams*/
-#endif
   if (ipcflg) printf("\n<RC> %d </RC>\n</IPC>\n",rc);
   
 /* This is for GradsPy */
