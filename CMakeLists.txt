@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(GrADS VERSION 2.2.3 LANGUAGES C)
+project(GrADS VERSION 2.3 LANGUAGES C)
 
 if(NOT WIN32)
   message(FATAL_ERROR "The CMake build currently targets native Windows; use configure/make on Unix")

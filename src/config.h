@@ -20,7 +20,7 @@
 #define GRADS_HP64 0
 
 /* GrADS version */
-#define GRADS_VERSION "2.2.3"
+#define GRADS_VERSION "2.3"
 
 /* Enable grib2 */
 #define GRIB2 0
@@ -110,7 +110,7 @@
 #define PACKAGE_NAME "GrADS"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "GrADS 2.2.3"
+#define PACKAGE_STRING "GrADS 2.3"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "grads"
@@ -119,7 +119,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.2.3"
+#define PACKAGE_VERSION "2.3"
 
 /* Enabled command line editing */
 #define READLINE 1
