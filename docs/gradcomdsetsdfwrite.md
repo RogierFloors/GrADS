@@ -24,7 +24,7 @@ The following six optional arguments are not enabled by default; each new call t
   `-rt      `sets the T axis as the record (unlimited) dimension\
   `-re      `sets the E axis as the record (unlimited) dimension\
 
-The following six optional arguments will "stick" once they are invoked; defaults are restored with the [`reset`](https://wetterzentrale.de/grads/doc/gradcomdreset.html), [`reinit`](https://wetterzentrale.de/grads/doc/gradcomdreinit.html), or [`clear sdfwrite`](https://wetterzentrale.de/grads/doc/gradcomdclear.html) commands.
+The following six optional arguments will "stick" once they are invoked; defaults are restored with the [`reset`](https://wetterzentrale.de/grads/docs/gradcomdreset.html), [`reinit`](https://wetterzentrale.de/grads/docs/gradcomdreinit.html), or [`clear sdfwrite`](https://wetterzentrale.de/grads/docs/gradcomdclear.html) commands.
 
 `-flt     `output data written with floating point precision\
 `-dbl     `output data written with double precision (default)\
@@ -41,9 +41,9 @@ The `-flt`, `-dbl`, `-nc3`,`-nc4`, `-chunk`, and `-zip` options are available in
 The `-3dz,``-3dt,-rt` and `-re` options are available in version 2.1.a2+.\
 The -4de option is available in version 2.1.1.b0.
 
-The options set with this command "stick" until the [`reset`](https://wetterzentrale.de/grads/doc/gradcomdreset.html), [`reinit`](https://wetterzentrale.de/grads/doc/gradcomdreinit.html), or [`clear sdfwrite`](https://wetterzentrale.de/grads/doc/gradcomdclear.html) commands are invoked -- they are not altered when <a href="gradcomdsdfwrite.html">`sdfwrite`</a> is invoked; however, there have been some changes related to which options are reset whenever a new <a href="gradcomdsetsdfwrite.html">`set sdfwrite`</a> command is invoked:
+The options set with this command "stick" until the [`reset`](https://wetterzentrale.de/grads/docs/gradcomdreset.html), [`reinit`](https://wetterzentrale.de/grads/docs/gradcomdreinit.html), or [`clear sdfwrite`](https://wetterzentrale.de/grads/docs/gradcomdclear.html) commands are invoked -- they are not altered when <a href="gradcomdsdfwrite.html">`sdfwrite`</a> is invoked; however, there have been some changes related to which options are reset whenever a new <a href="gradcomdsetsdfwrite.html">`set sdfwrite`</a> command is invoked:
 
-- (2.0.a3) Originally, all options were designed to "stick" until a [`clear sdfwrite`](https://wetterzentrale.de/grads/doc/gradcomdclear.html) command was invoked.
+- (2.0.a3) Originally, all options were designed to "stick" until a [`clear sdfwrite`](https://wetterzentrale.de/grads/docs/gradcomdclear.html) command was invoked.
 - (2.0.a9) The interface was changed so that the `-5d` and `-4d` options are reset to the default (off) with each new <a href="gradcomdsetsdfwrite.html">`set sdfwrite`</a> command. This means that if these options are not used, the output variable will have the same number of dimensions as the defined variable. The options that control the precision, format, and compression of the output file continue to "stick" until they are explicitly changed.
 - (2.1.a2) The new options (`-3dz,``-3dt,-rt` and `-re`) have the same behavior as the `-5d` and `-4d` options -- they are reset to the default (off) with each new <a href="gradcomdsetsdfwrite.html">`set sdfwrite`</a> command.
 

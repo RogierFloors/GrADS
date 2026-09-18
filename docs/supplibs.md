@@ -15,7 +15,7 @@ The source-build instructions below are retained for developers who need to buil
 
 ## Advanced source-build instructions
 
-There are many supplemental libraries that are required to enable various features in the GrADS executable. Building all these libraries from source is not necessarily easy; this page provides some guidance and suggestions that have led to success on COLA's unix systems (64-bit linux running CentOS, and Mac OSX). COLA's objective in building GrADS is to make our binary releases portable, so we strive to build all the libraries from scratch, disabling features GrADS doesn't need, and then link statically when building GrADS. If you are building GrADS from source but not planning to distribute your build, then you may find that many of these libraries are already installed on your system and you can link with them dynamically. In this case, use the --enable-dyn-supplibs option with the GrADS configure script. Please post questions about building from source to the [GrADS Users Forum](https://wetterzentrale.de/grads/doc/gadoc.html). If you have the proper privileges, you may install these anywhere on your system instead of \$HOME, just be sure to change the commands listed in the table below to accomodate your own installation.
+There are many supplemental libraries that are required to enable various features in the GrADS executable. Building all these libraries from source is not necessarily easy; this page provides some guidance and suggestions that have led to success on COLA's unix systems (64-bit linux running CentOS, and Mac OSX). COLA's objective in building GrADS is to make our binary releases portable, so we strive to build all the libraries from scratch, disabling features GrADS doesn't need, and then link statically when building GrADS. If you are building GrADS from source but not planning to distribute your build, then you may find that many of these libraries are already installed on your system and you can link with them dynamically. In this case, use the --enable-dyn-supplibs option with the GrADS configure script. Please post questions about building from source to the [GrADS Users Forum](https://wetterzentrale.de/grads/docs/index.html). If you have the proper privileges, you may install these anywhere on your system instead of \$HOME, just be sure to change the commands listed in the table below to accomodate your own installation.
 
 To begin, create a top-level directory for the supplemental libraries:
 
@@ -36,7 +36,7 @@ Create a directory for unpacked source code:
 mkdir -p $SUPPLIBS/src
 ```
 
-Get source dependencies from your distribution or conda environment. The old COLA FTP archive is no longer maintained; using conda is the supported route for a reproducible build. See the [installation documentation](https://wetterzentrale.de/grads/doc/gadoc.html).
+Get source dependencies from your distribution or conda environment. The old COLA FTP archive is no longer maintained; using conda is the supported route for a reproducible build. See the [installation documentation](https://wetterzentrale.de/grads/docs/index.html).
 
 ```console
 cd $SUPPLIBS/tarfiles

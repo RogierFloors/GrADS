@@ -5,11 +5,11 @@ orphan: true
 
 # Indexalpha
 
-[GrADS Home](https://wetterzentrale.de/grads/doc/gadoc.html)
+[GrADS Home](https://wetterzentrale.de/grads/docs/index.html)
 
 **GrADS Documentation Index\**
 
-[GrADS Documentation](https://wetterzentrale.de/grads/doc/gadoc.html)
+[GrADS Documentation](https://wetterzentrale.de/grads/docs/index.html)
 
 **Recommended installation:** `mamba create -n grads -c conda-forge grads`. For Python support, install `gradspy` separately.
 

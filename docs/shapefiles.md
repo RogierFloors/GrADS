@@ -218,7 +218,7 @@ should be validated or repaired with a GIS tool before it is used.
 
 The repository contains examples of creating and drawing measured point and
 line shapefiles. The current documentation and downloadable script library
-are available from the [GrADS documentation site](https://wetterzentrale.de/grads/doc/gadoc.html).
+are available from the [GrADS documentation site](https://wetterzentrale.de/grads/docs/index.html).
 
 The following figures show shapefile overlays produced by the example
 workflows:

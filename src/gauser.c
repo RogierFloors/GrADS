@@ -2985,7 +2985,7 @@ gadouble minvals[4], maxvals[4],dval;
     gaprnt (2,"  q gr2xy    Converts grid to XY screen coordinates\n");
     gaprnt (2,"  q pp2xy    Converts virtual page XY to real page XY coordinates\n");
     gaprnt (2,"Details about argument syntax for some of these options are in the \n");
-    gaprnt (2,"online documentation: https://wetterzentrale.de/grads/doc/gradcomdquery.html\n");
+    gaprnt (2,"online documentation: https://wetterzentrale.de/grads/docs/gradcomdquery.html\n");
   }
   else if (cmpwrd(arg,"mem")) {
     glook();
@@ -3958,7 +3958,7 @@ gadouble minvals[4], maxvals[4],dval;
 
   else if (cmpwrd(arg,"udft")) {
     gaprnt(2,"Warning: User Defined Functions have been replaced by User Defined Plug-ins.\n");
-    gaprnt(2,"         Please read documentation at https://wetterzentrale.de/grads/doc/udp.html\n");
+    gaprnt(2,"         Please read documentation at https://wetterzentrale.de/grads/docs/udp.html\n");
     return (0);
   }
 
@@ -4809,7 +4809,7 @@ gadouble minvals[4], maxvals[4],dval;
 
 gaint gahelp (char *cmd, struct gacmn *pcm) {
 
-  printf ("\nFor Complete Information See:  https://wetterzentrale.de/grads/doc/gadoc.html\n\n");
+  printf ("\nFor Complete Information See:  https://wetterzentrale.de/grads/docs/index.html\n\n");
   printf ("Basic Commands:\n");
   printf (" OPEN <descr>      opens a data file \n");
   printf (" Query             shows current status \n");
@@ -7826,7 +7826,7 @@ gaint rc;
       snprintf(pout,1255,"WARNING: The use of PDEF FILE in %s \n",pfi->dnam);
       gaprnt (1,pout);
       gaprnt (1," may be incorrect. Please make sure you are using it properly.\n");
-      gaprnt (1," Updated documentation is at https://wetterzentrale.de/grads/doc/pdef.html\n");
+      gaprnt (1," Updated documentation is at https://wetterzentrale.de/grads/docs/pdef.html\n");
     }
   }
   

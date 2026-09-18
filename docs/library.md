@@ -14,7 +14,7 @@ the scripts you need and place them in a directory on your GrADS script path.
 | [cbar.gs](_downloads/grads-scripts/cbar.gs)<br>[cbarn.gs](_downloads/grads-scripts/cbarn.gs)<br>[cbarm.gs](_downloads/grads-scripts/cbarm.gs) | Draws a rectangular colour legend next to shaded plots. `cbar.gs` draws filled rectangles with labels; `cbarn.gs` adds outlines and triangular endpoints; `cbarm.gs` is suited to plots using 30 or more colours. |
 | [cbarc.gs](_downloads/grads-scripts/cbarc.gs) | Draws a small fan-shaped colour legend in the corner of a shaded plot. |
 | [cbar_l.gs](_downloads/grads-scripts/cbar_l.gs)<br>[cbar_line.gs](_downloads/grads-scripts/cbar_line.gs)<br>[cbar_line2.gs](_downloads/grads-scripts/cbar_line2.gs) | Draws legends for line graphs. |
-| [cmap.gs](_downloads/grads-scripts/cmap.gs) | Creates a colour table. See the additional [colour-map documentation](https://wetterzentrale.de/grads/doc/scripts/cmapdoc). |
+| [cmap.gs](_downloads/grads-scripts/cmap.gs) | Creates a colour table. See the [colour control documentation](colorcontrol.md). |
 | [connect_the_dots.gs](_downloads/grads-scripts/connect_the_dots.gs) | Draws a line connecting the user's mouse clicks. |
 | [define_colors.gs](_downloads/grads-scripts/define_colors.gs) | Defines colours using the [`set rgb`](gradcomdsetrgb.md) command. |
 | [defval_demo.gs](_downloads/grads-scripts/defval_demo.gs) | Demonstrates the [`q defval`](gradcomdquery.md) and [`set defval`](gradcomdsetdefval.md) commands. |
@@ -25,7 +25,7 @@ the scripts you need and place them in a directory on your GrADS script path.
 | [makebg.gs](_downloads/grads-scripts/makebg.gs) | Creates a background map image with topographic texture. It requires a DODS-enabled GrADS build and the ImageMagick `combine` utility. |
 | [map.gs](_downloads/grads-scripts/map.gs) | Automates settings for useful map projections. |
 | [mconv.gs](_downloads/grads-scripts/mconv.gs) | Calculates moisture convergence. |
-| [meteogram_subset_GDS.gs](_downloads/grads-scripts/meteogram_subset_GDS.gs)<br>[meteogram_GDS.gs](https://web.archive.org/web/20241216024229id_/http://cola.gmu.edu/grads/scripts/meteogram_GDS.gs) | Draws a 10-day meteogram using NCEP GFS forecast data accessed through the GrADS Data Server. Run `meteogram_subset_GDS.gs` first with an OPeNDAP-enabled GrADS build, then run `meteogram_GDS.gs`. |
+| [meteogram_subset_GDS.gs](_downloads/grads-scripts/meteogram_subset_GDS.gs) | Downloads data from the GrADS Data Server for the 10-day meteogram example. The companion `meteogram_GDS.gs` script is no longer included. |
 | [narropen.gs](_downloads/grads-scripts/narropen.gs) | Uses command-line arguments to build a descriptor file for pre-projected (Lambert conformal) NARR NetCDF data. |
 | [panels.gsf](_downloads/grads-scripts/panels.gsf)<br>[panels_demo.gs](_downloads/grads-scripts/panels_demo.gs) | Creates global variables containing `set vpage` commands for multi-panel plots and demonstrates [dynamic script-function loading](gsf.md). |
 | [script_math_demo.gs](_downloads/grads-scripts/script_math_demo.gs) | Demonstrates mathematical functions in the GrADS scripting language. |

@@ -10,9 +10,6 @@
 /* Enabled geotiff */
 #define GEOTIFF 1
 
-/* Define if GetFile has a short prototype */
-/* #undef GETFILE_SHORT_PROTOTYPE */
-
 /* Machine is a Cray */
 #define GRADS_CRAY 0
 
@@ -23,10 +20,10 @@
 #define GRADS_VERSION "2.3"
 
 /* Enable grib2 */
-#define GRIB2 0
+#define GRIB2 1
 
 /* Enable netcdf4 */
-#define HAVENETCDF4 0
+#define HAVENETCDF4 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
@@ -35,7 +32,7 @@
 #define HAVE_FSEEKO 1
 
 /* Define to 1 if you have the <hdf4_netcdf.h> header file. */
-#define HAVE_HDF4_NETCDF_H 1
+/* #undef HAVE_HDF4_NETCDF_H */
 
 /* Define to 1 if you have the <history.h> header file. */
 /* #undef HAVE_HISTORY_H */
@@ -47,7 +44,7 @@
 #define HAVE_LIBM 1
 
 /* Define if you have a readline compatible library */
-#define HAVE_LIBREADLINE 1
+/* #undef HAVE_LIBREADLINE */
 
 /* Define to 1 if you have the <malloc.h> header file. */
 #define HAVE_MALLOC_H 1
@@ -59,16 +56,13 @@
 /* #undef HAVE_READLINE_H */
 
 /* Define if your readline library has \`add_history' */
-#define HAVE_READLINE_HISTORY 1
+/* #undef HAVE_READLINE_HISTORY */
 
 /* Define to 1 if you have the <readline/history.h> header file. */
-#define HAVE_READLINE_HISTORY_H 1
+/* #undef HAVE_READLINE_HISTORY_H */
 
 /* Define to 1 if you have the <readline/readline.h> header file. */
-#define HAVE_READLINE_READLINE_H 1
-
-/* Define to 1 if you have the `SimpleGetFile' function. */
-/* #undef HAVE_SIMPLEGETFILE */
+/* #undef HAVE_READLINE_READLINE_H */
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
@@ -95,10 +89,10 @@
 #define HAVE_UNISTD_H 1
 
 /* Define if hdf prefixes netcdf symbols by sd */
-#define HDF_HAVE_NETCDF /**/
+/* #undef HDF_HAVE_NETCDF */
 
 /* A macro that append sd_ to netcdf symbols if needed */
-#define HDF_NETCDF_NAME(name) sd_ ## name
+/* #undef HDF_NETCDF_NAME */
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
@@ -131,22 +125,22 @@
 #define USECAIRO 1
 
 /* Enable OPeNDAP for grids */
-#define USEDAP 0
+#define USEDAP 1
 
 /* Enable OPeNDAP for station data */
 /* #undef USEGADAP */
 
 /* Enable gd */
-#define USEGD 0
+#define USEGD 1
 
 /* Enable hdf4 */
 #define USEHDF 1
 
 /* Enable hdf5 */
-#define USEHDF5 0
+#define USEHDF5 1
 
 /* Enable netcdf */
-#define USENETCDF 0
+#define USENETCDF 1
 
 /* Enable shapefile */
 #define USESHP 1
@@ -164,7 +158,7 @@
 #endif
 
 /* Define to 1 if the X Window System is missing or not being used. */
-#define X_DISPLAY_MISSING 1
+/* #undef X_DISPLAY_MISSING */
 
 /* Enable large inode numbers on Mac OS X 10.5.  */
 #ifndef _DARWIN_USE_64_BIT_INODE

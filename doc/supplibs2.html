@@ -27,7 +27,7 @@ The source-build instructions below are retained for developers who need to
 build GrADS themselves.</p>
 <details>
 <summary>Advanced source-build instructions</summary>
-<p>There are many supplemental libraries that are required to enable various features in the GrADS executable. Building all these libraries from source is not necessarily easy; this page provides some guidance and suggestions that have led to success on COLA's unix systems (64-bit linux running CentOS, and Mac OSX). COLA's objective in building GrADS is to make  our binary releases portable, so we strive to build all the libraries from scratch, disabling features GrADS doesn't need, and then link statically when building GrADS. If you are building GrADS from source but not planning to distribute your build, then you may find that many of these libraries are already installed on your system and you can link with them dynamically. In this case, use the --enable-dyn-supplibs option with the GrADS configure script. Please post questions about building from source to the <a href="https://wetterzentrale.de/grads/doc/gadoc.html" target="_parent">GrADS Users Forum</a>. If you have the proper privileges, you may install these anywhere on your system instead of $HOME, just be sure to change the commands listed in the table below to accomodate your own installation. </p>
+<p>There are many supplemental libraries that are required to enable various features in the GrADS executable. Building all these libraries from source is not necessarily easy; this page provides some guidance and suggestions that have led to success on COLA's unix systems (64-bit linux running CentOS, and Mac OSX). COLA's objective in building GrADS is to make  our binary releases portable, so we strive to build all the libraries from scratch, disabling features GrADS doesn't need, and then link statically when building GrADS. If you are building GrADS from source but not planning to distribute your build, then you may find that many of these libraries are already installed on your system and you can link with them dynamically. In this case, use the --enable-dyn-supplibs option with the GrADS configure script. Please post questions about building from source to the <a href="https://wetterzentrale.de/grads/docs/index.html" target="_parent">GrADS Users Forum</a>. If you have the proper privileges, you may install these anywhere on your system instead of $HOME, just be sure to change the commands listed in the table below to accomodate your own installation. </p>
 <p>To begin, make a directory top level directory for the supplibs under your $HOME, or some other  suitable directory:<br>
   <span class="code">mkdir $HOME/grads/supplibs<br>
   setenv SUPPLIBS $HOME/grads/supplibs
@@ -38,7 +38,7 @@ build GrADS themselves.</p>
 <span class="code">mkdir -p $SUPPLIBS/src</span></p>
 Get source dependencies from your distribution or conda environment. The old
 COLA FTP archive is no longer maintained; using conda is the supported route
-for a reproducible build. See the <a href="https://wetterzentrale.de/grads/doc/gadoc.html">installation documentation</a>.<br>
+for a reproducible build. See the <a href="https://wetterzentrale.de/grads/docs/index.html">installation documentation</a>.<br>
 <span class="code">cd $SUPPLIBS/tarfiles<br>
 </span>
 <p>These are the directories where  the compiled libaries, pkgconfig files, include files, and any executable utilities  will be installed. This will be created automatically by the library software, there is no need to create them manually. <br>
@@ -340,7 +340,7 @@ Also change &quot;-g -O2&quot; to &quot;-g -fPIC -O2&quot; when it occurs instea
     <td valign="top" bgcolor="b8c8d7" bgcolo ="ccdceb">A helper tool used when compiling applications and libraries. 
       Required for Cairo.<br>
       <a href="http://pkg-config.freedesktop.org/wiki/">home page</a><br>
-      <a href="https://wetterzentrale.de/grads/doc/gadoc.html"></a></td>
+      <a href="https://wetterzentrale.de/grads/docs/index.html"></a></td>
     <td bgcolor="b8c8d7"><p class="code">cd $SUPPLIBS/src<br>
         tar xvfz ../tarfiles/pkgconfig-0.23.tar.gz<br>
         cd pkg-config-0.23<br>

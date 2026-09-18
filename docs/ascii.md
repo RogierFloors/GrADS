@@ -8,7 +8,7 @@ title: ASCII or Text Data and GrADS
 
 ***Input ASCII data***
 
-GrADS does not directly handle data in ASCII format -- there is no such thing as '[dtype](https://wetterzentrale.de/grads/doc/descriptorfile.html#DTYPE) ascii'. ASCII data must be converted to into one of the binary data formats that are handled by GrADS. There are many ways to do this with a variety of programming/scripting languages and tools. Below is a very simple example of how you could do it using a GrADS script.
+GrADS does not directly handle data in ASCII format -- there is no such thing as '[dtype](https://wetterzentrale.de/grads/docs/descriptorfile.html#DTYPE) ascii'. ASCII data must be converted to into one of the binary data formats that are handled by GrADS. There are many ways to do this with a variety of programming/scripting languages and tools. Below is a very simple example of how you could do it using a GrADS script.
 
 Suppose you have an ascii file that contains a column of 100 numbers:
 
