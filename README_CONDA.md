@@ -19,7 +19,7 @@ mamba install -n grads -c conda-forge gradspy
 Verify the native installation with:
 
 ```bash
-printf "'q config'\n'quit'\n" | grads -bl
+printf "q config\nquit\n" | grads -bl
 ```
 
 General source-build instructions are in [INSTALL](INSTALL).
